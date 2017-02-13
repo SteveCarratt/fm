@@ -1,0 +1,42 @@
+﻿namespace FM
+{
+    public enum PlayerAttribute
+    {
+        Corners,
+        Crossing,
+        Dribbling,
+        Finishing,
+        FirstTouch,
+        FreeKickTaking,
+        Heading,
+        LongShots,
+        LongThrows,
+        Marking,
+        Passing,
+        PenaltyTaking,
+        Tackling,
+        Technique,
+        Agression,
+        Anticipation,
+        Bravery,
+        Composure,
+        Concentration,
+        Decisions,
+        Determination,
+        Flair,
+        Leadership,
+        OffTheBall,
+        Postioning,
+        Teamwork,
+        Vision,
+        WorkRate,
+        Acceleration,
+        Agility,
+        Balance,
+        JumpingReach,
+        NaturalFitness,
+        Pace,
+        Stamina,
+        Strength
+    }
+}
