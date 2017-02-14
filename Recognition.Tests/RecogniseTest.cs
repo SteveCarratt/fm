@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Timers;
 using FM;
 using ImageProcessor;
 using NUnit.Framework;
@@ -40,12 +42,34 @@ namespace Recognition.Tests
         [TestCase(PlayerAttribute.Agression, 8)]
         [TestCase(PlayerAttribute.Anticipation, 9)]
         [TestCase(PlayerAttribute.Bravery, 12)]
-        [TestCase(PlayerAttribute.Composure, 12)]
+        [TestCase(PlayerAttribute.Composure, 9)]
+        [TestCase(PlayerAttribute.Concentration, 16)]
+        [TestCase(PlayerAttribute.Decisions, 11)]
+        [TestCase(PlayerAttribute.Determination, 17)]
+        [TestCase(PlayerAttribute.Flair, 8)]
+        [TestCase(PlayerAttribute.Leadership, 10)]
+        [TestCase(PlayerAttribute.OffTheBall, 12)]
+        [TestCase(PlayerAttribute.Postioning, 10)]
+        [TestCase(PlayerAttribute.Teamwork, 14)]
+        [TestCase(PlayerAttribute.Vision, 9)]
+        [TestCase(PlayerAttribute.WorkRate, 16)]
         [TestCase(PlayerAttribute.Acceleration, 14)]
+        [TestCase(PlayerAttribute.Agility, 10)]
+        [TestCase(PlayerAttribute.Balance, 10)]
+        [TestCase(PlayerAttribute.JumpingReach, 16)]
+        [TestCase(PlayerAttribute.NaturalFitness, 14)]
+        [TestCase(PlayerAttribute.Pace, 12)]
+        [TestCase(PlayerAttribute.Stamina, 16)]
+        [TestCase(PlayerAttribute.Strength, 17)]
         public void Recognises_attribute(PlayerAttribute attribute, int expectedValue)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var readValue = _attributesImage.GetValueForAttribute(attribute);
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed.TotalSeconds);
             Assert.That(readValue, Is.EqualTo(expectedValue));
+
         }
     }
 }

@@ -10,63 +10,58 @@ using ImageProcessor.Imaging.Formats;
 
 namespace Recognition
 {
-    public class AttributesImage
+    public class AttributesImage : IDisposable
     {
         private readonly string _imagePath;
+        private readonly ImageFactory _imageFactory;
 
         public AttributesImage(string imagePath)
         {
             _imagePath = imagePath;
+            _imageFactory = new ImageFactory(preserveExifData: true);
         }
 
         public int GetValueForAttribute(PlayerAttribute attribute)
         {
-            using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
-            {
-                int value;
-                if (TryGetAttributeValue(imageFactory, AttributesMask.Masks.First(x => x.Key == attribute), out value))
-                {
-                    return value;
-                }
-                else return 0;
-            }
+            int value;
+
+            return TryGetAttributeValue(AttributesMask.Masks.First(x => x.Key == attribute), out value) ? value : 0;
         }
 
         public PlayerAttributes GetAttributes()
         {
             var attributes = new WritablePlayerAttributes();
-            using (ImageFactory imageFactory = new ImageFactory(preserveExifData: true))
+
+            foreach (var attributeMask in AttributesMask.Masks)
             {
-                foreach (var attributeMask in AttributesMask.Masks)
+                int value;
+                if (TryGetAttributeValue(attributeMask, out value))
                 {
-                    int value;
-                    if (TryGetAttributeValue(imageFactory, attributeMask, out value))
-                    {
-                        attributes[attributeMask.Key] = value;
-                    }
+                    attributes[attributeMask.Key] = value;
                 }
             }
 
             return attributes;
         }
 
-        private bool TryGetAttributeValue(ImageFactory imageFactory, KeyValuePair<PlayerAttribute, Rectangle> attributeMask, out int value)
+        private bool TryGetAttributeValue(KeyValuePair<PlayerAttribute, Rectangle> attributeMask, out int value)
         {
             value = 0;
+
+            var imageFactory = _imageFactory.Load(_imagePath).Crop(attributeMask.Value);
+            _imageFactory.
             foreach (var operation in _operations)
             {
                 var memStream = new MemoryStream();
 
-                var image = operation.Value(imageFactory.Load(_imagePath)
-                    .Crop(attributeMask.Value)).Format(new TiffFormat());
+                var image = operation.Value(imageFactory).Format(new TiffFormat());
 
                 image.Save(memStream);
-
-                memStream.Seek(0, SeekOrigin.Begin);
 
                 int attributeValue;
 
                 var imageStream = memStream.ToArray();
+
                 if (Recognise.TryReadIntFromImage(imageStream, out attributeValue))
                 {
                     value = attributeValue;
@@ -75,7 +70,8 @@ namespace Recognition
 
                 var wrongstring = Recognise.ReadStringFromImage(imageStream);
 
-                Console.WriteLine($"Attribute {attributeMask.Key} not found by {operation.Key}. String read was {wrongstring}");
+                Console.WriteLine(
+                    $"Attribute {attributeMask.Key} not found by {operation.Key}. String read was {wrongstring}");
 
                 var croppedValueImagePath = Path.Combine(Path.GetDirectoryName(_imagePath),
                     Path.GetFileNameWithoutExtension(_imagePath) +
@@ -94,7 +90,12 @@ namespace Recognition
                 x => x.ReplaceColor(Color.FromArgb(61, 75, 72), Color.White, 10)),
             new KeyValuePair<string, Func<ImageFactory, ImageFactory>>("detect-edges",
                 x => x.DetectEdges(new PrewittEdgeFilter())),
-            
         };
+
+
+        public void Dispose()
+        {
+            _imageFactory.Dispose();
+        }
     }
 }
