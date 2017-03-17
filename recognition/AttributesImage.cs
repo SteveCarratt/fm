@@ -25,7 +25,11 @@ namespace Recognition
         {
             int value;
 
-            return TryGetAttributeValue(AttributesMask.Masks.First(x => x.Key == attribute), out value) ? value : 0;
+            var tryGetAttributeValue = TryGetAttributeValue(AttributesMask.Masks.First(x => x.Key == attribute), out value);
+
+            if (!tryGetAttributeValue) throw new Exception($"could not get value for {attribute}");
+
+            return value;
         }
 
         public PlayerAttributes GetAttributes()
@@ -48,10 +52,11 @@ namespace Recognition
         {
             value = 0;
 
-            var imageFactory = _imageFactory.Load(_imagePath).Crop(attributeMask.Value);
-            _imageFactory.
+            
             foreach (var operation in _operations)
             {
+                var imageFactory = _imageFactory.Load(_imagePath).Crop(attributeMask.Value);
+
                 var memStream = new MemoryStream();
 
                 var image = operation.Value(imageFactory).Format(new TiffFormat());

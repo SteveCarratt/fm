@@ -1,26 +1,42 @@
 ﻿using System;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace FM
 {
-    public class Rating
+    public static class Rating
     {
-        public static double Calculate(PlayerAttributes playerAttributes)
+        public static double Calculate(PositionCoefficient coefficient, PlayerAttributes playerAttributes)
         {
-            //var minAccelerationRating = GetMinRating(10, PlayerAttributes["acceleration"]);
-            //var minAgilityRating = GetMinRating(10, PlayerAttributes["agility"]);
-            var maxLeadershipRating = GetMaxRating(10, playerAttributes[PlayerAttribute.Leadership]);
-            return maxLeadershipRating; //Math.Pow((minAccelerationRating)*(minAgilityRating), 1d/2d);
+            double rating = 0;
+            double minRating = 1;
+            int count = 0;
+            
+            foreach (var coeff in coefficient)
+            {
+                var maxRating = GetMaxRating(coeff.Value.Maximum, playerAttributes[coeff.Key]);
+                minRating = minRating*GetMinRating(coeff.Value.Minimum, playerAttributes[coeff.Key]);
+                var standardRating = GetStandardRating(coeff.Value.Power, playerAttributes[coeff.Key]);
+                count += coeff.Value.Power;
+                rating += standardRating;
+            }
+
+            return (rating*minRating) / count;
         }
 
         private static double GetMinRating(int min, int attributeValue)
         {
-            return 1d/(1d + Math.Pow(Math.E, (min - attributeValue)*13));
+            return 1d/(1d + Math.Pow(Math.E, (min - attributeValue-0.5)*20));
         }
 
         private static double GetMaxRating(int max, int attributeValue)
         {
             return ((attributeValue - GetMinRating(max, attributeValue)*attributeValue) +
                    GetMinRating(max, attributeValue)*max)/20;
+        }
+
+        private static double GetStandardRating(int power, int value)
+        {
+            return Convert.ToDouble(value)* power/20d;
         }
     }
 }

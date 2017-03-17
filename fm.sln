@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recognition.Tests", "Recogn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FM", "FM\FM.csproj", "{9B9A359B-166B-46AD-B46A-4EC769BA3E9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FM.Tests", "FM.Tests\FM.Tests.csproj", "{34D43E26-4BD2-44C4-BA4B-D1171B44E358}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{9B9A359B-166B-46AD-B46A-4EC769BA3E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B9A359B-166B-46AD-B46A-4EC769BA3E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B9A359B-166B-46AD-B46A-4EC769BA3E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34D43E26-4BD2-44C4-BA4B-D1171B44E358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D43E26-4BD2-44C4-BA4B-D1171B44E358}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D43E26-4BD2-44C4-BA4B-D1171B44E358}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D43E26-4BD2-44C4-BA4B-D1171B44E358}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

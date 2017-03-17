@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="PlayerAttribute.cs" />
     <Compile Include="PlayerAttributes.cs" />
+    <Compile Include="PositionCoefficients.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rating.cs" />
     <Compile Include="WritablePlayerAttributes.cs" />

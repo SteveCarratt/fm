@@ -7,6 +7,7 @@ using System.IO;
 using System.Timers;
 using FM;
 using ImageProcessor;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 
@@ -69,7 +70,15 @@ namespace Recognition.Tests
             stopwatch.Stop();
             Console.WriteLine(stopwatch.Elapsed.TotalSeconds);
             Assert.That(readValue, Is.EqualTo(expectedValue));
+        }
 
+
+        [Test]
+        public void What_does_this_do()
+        {
+            var attr = _attributesImage.GetAttributes();
+
+            Console.WriteLine(JsonConvert.SerializeObject(attr));
         }
     }
 }
